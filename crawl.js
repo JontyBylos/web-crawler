@@ -1,5 +1,8 @@
 const { JSDOM } = require('jsdom')
 
+function crawlPage(){
+
+}
 
 
 function normalizeURL(url) {
@@ -15,31 +18,26 @@ function normalizeURL(url) {
 }
 
 function getURLsFromHTML(htmlBody, baseURL){
-    const { JSDOM } = require('jsdom')
+    const urls = []
     const dom = new JSDOM(htmlBody) 
-    const nodelist = dom.window.document.querySelectorAll('a')
-    const nodelistarr = Array.from(nodelist)
+    const anchorElements = dom.window.document.querySelectorAll('a')
     
-    
-    function urlIsRelative(url) {
-        return !(url.startsWith('http://') || url.startsWith('https://'));
-    }
-
-    function getHrefs(element){
-        let url = element.href; 
-        if (urlIsRelative(url)) {
-            url = baseURL + url;
+    for (const aElement of anchorElements){
+        if (aElement.href.slice(0,1) === '/'){
+          try {
+            urls.push(new URL(aElement.href, baseURL).href)
+          } catch (err){
+            console.log(`${err.message}: ${aElement.href}`)
+          }
+        } else {
+          try {
+            urls.push(new URL(aElement.href).href)
+          } catch (err){
+            console.log(`${err.message}: ${aElement.href}`)
+          }
         }
-        if (url.charAt(url.length - 1) === "/") {
-            url = url.slice(0, -1);
-        }
-        return url;
-    }
-    
-    
-    console.log(nodelistarr.map(getHrefs))
-    
-    return nodelistarr.map(getHrefs)
+      }
+      return urls
 }
 
 const htmlBody = '<html><body><a href="https://blog.boot.dev"><span>Go to Boot.dev</span></a><a href="/about/"><span>About</span></a></body></html>'
@@ -48,5 +46,6 @@ getURLsFromHTML(htmlBody, 'https://blog.boot.dev')
 
 module.exports = {
     normalizeURL,
-    getURLsFromHTML
+    getURLsFromHTML,
+    crawlPage
 }
