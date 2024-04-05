@@ -1,9 +1,8 @@
 const { emitWarning } = require('node:process');
+const { crawlPage } = require('./crawl.js')
 
 
-
-
-function main(){
+async function main(){
     if (process.argv.length < 3) {
         emitWarning('Error', {
             detail: 'No URL was provided',
@@ -18,10 +17,11 @@ function main(){
     }
 
     const base_url = process.argv[2]
-    if (process.argv.length === 3) {
-        console.log(`crawler is starting at that ${base_url}`) // process.argv[2] will be the BaseURL
-          
-    }
+    console.log(`crawler is starting at that ${base_url}`) 
+    await crawlPage(base_url)
+        
+
+   
   }
   
   main()

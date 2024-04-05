@@ -1,7 +1,26 @@
 const { JSDOM } = require('jsdom')
 
-function crawlPage(){
 
+
+async function crawlPage(currentURL){
+   try {
+    const response = await fetch(currentURL)
+    if (response.status > 399) {
+        console.log(`Error: ${response.status} level status code returned`)
+        return
+    }
+    const contentType = response.headers.get('content-type')
+    if (!contentType.includes('text/html')){
+        console.log('Error: content-type is not text/html')
+        return
+    }
+    const html = await response.text();
+    console.log(html);
+    
+   } catch (err) {
+    console.log(err.message)
+   }
+   
 }
 
 
