@@ -1,5 +1,6 @@
 const { test, expect } = require('@jest/globals')
 const { normalizeURL, getURLsFromHTML } = require('./crawl.js')
+const { sortReport } = require('./report.js')
 
 test('normalizeURL slash', () => {
     expect(normalizeURL("https://blog.boot.dev/path/")).toBe("blog.boot.dev/path");
@@ -45,6 +46,20 @@ test('normalizeURL slash', () => {
     const inputBody = '<html><body><a href="path/one"><span>Boot.dev></span></a></body></html>'
     const actual = getURLsFromHTML(inputBody, inputURL)
     const expected = [ ]
+    expect(actual).toEqual(expected)
+  })
+  
+
+  test('printReport handle error', () => {
+    
+    const actual = sortReport({
+        'wagslane.dev/tags': 62,
+        'wagslane.dev/': 63
+    })
+    const expected = [
+        ['wagslane.dev/', 63],
+        ['wagslane.dev/tags', 62]
+    ]
     expect(actual).toEqual(expected)
   })
   
