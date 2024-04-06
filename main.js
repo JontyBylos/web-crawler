@@ -8,15 +8,21 @@ async function main(){
     
           
     }
-    if (process.argv.length > 3) {
+    if (process.argv.length > 4) {
         
-        console.log("Error: only one argument can entered (a URL)")
+        console.log("Error: only two arguments can entered (a URL and a limit of iterative crawls)")
           
     }
 
     const base_url = process.argv[2]
-    console.log(`crawler is starting at that ${base_url}`) 
-    const pages = await crawlPage(base_url, base_url, {})
+
+    let limit = null
+    if (!process.argv.length < 4) {
+        limit = process.argv[3]
+    }
+    
+    console.log(`crawler is starting at that ${base_url} with a limit of ${limit} iterations`) 
+    const pages = await crawlPage(base_url, base_url, {}, limit)
     printReport(pages)
 
    
