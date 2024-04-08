@@ -1,5 +1,4 @@
 function printReport(pages){
-   
    const sortedPages = sortReport(pages)
    console.log("Report starting...")
    for (page of sortedPages){
@@ -7,8 +6,6 @@ function printReport(pages){
     count = page[1]
     console.log(`Found ${count} internal links to ${url}`)
    }
-   
-    
 }
 
 function sortReport(pages){

@@ -1,10 +1,10 @@
 const { JSDOM } = require('jsdom')
-let count = 0
+let totalCount = 0
+let externalCount = 0
 
-async function crawlPage(baseURL, currentURL, pages, limit) {
+async function crawlPage(baseURL, currentURL, pages, totalLimit) {
     
-    if (count >= limit){
-        
+    if (totalCount >= totalLimit){
         return pages
         
     }
@@ -12,7 +12,8 @@ async function crawlPage(baseURL, currentURL, pages, limit) {
     const baseUrlObj = new URL(baseURL)
 
     if (currentUrlObj.hostname !== baseUrlObj.hostname) {
-        return pages
+            return pages
+        
     }
     const normURL = normalizeURL(currentURL)
 
@@ -24,7 +25,7 @@ async function crawlPage(baseURL, currentURL, pages, limit) {
     }
 
     pages[normURL] = 1
-    count++
+    totalLimit++
 
     console.log(`crawling ${currentURL}`)
     let htmlBody = ''
@@ -45,7 +46,7 @@ async function crawlPage(baseURL, currentURL, pages, limit) {
     const nextURLs = getURLsFromHTML(htmlBody, baseURL)
 
     for(const nextURL of nextURLs) {
-        pages = await crawlPage(baseURL, nextURL, pages, limit)
+        pages = await crawlPage(baseURL, nextURL, pages, totalLimit)
     }
 
     return pages
